@@ -15,11 +15,16 @@
     </nav>
 
     <main class="flex-1">
-        <?php if (!empty($flash)): ?>
-            <div role="alert">
-                <?= htmlspecialchars($flash) ?>
-            </div>
-        <?php endif; ?>
+        <?php foreach (($flash ?? []) as $type => $messages): ?>
+            <?php foreach ($messages as $message): ?>
+                <div
+                    role="alert"
+                    class="px-4 py-3 <?= $type === 'success' ? 'bg-green-100' : 'bg-yellow-100' ?>"
+                >
+                    <?= htmlspecialchars($message) ?>
+                </div>
+            <?php endforeach; ?>
+        <?php endforeach; ?>
 
         <?= $content ?>
     </main>

@@ -6,20 +6,28 @@
             Бесплатно проверяйте сайты на SEO-пригодность
         </p>
 
-        <form class="flex gap-4">
-            <input
-                type="text"
-                name="url"
-                placeholder="https://www.example.com"
-                class="flex-1 rounded-lg"
-            >
+        <form action="/urls" method="post" class="flex gap-4">
+            <div class="flex-1">
+                <input
+                    type="text"
+                    name="url"
+                    value="<?= htmlspecialchars($url ?? '') ?>"
+                    placeholder="https://www.example.com"
+                    class="w-full rounded-lg"
+                >
 
-            <button
+                <?php if (!empty($errors['url'])): ?>
+                    <div class="text-red-600 mt-2">
+                        <?= htmlspecialchars($errors['url'][0]) ?>
+                    </div>
+                <?php endif; ?>
+            </div>
+
+            <input
                 type="submit"
-                class="bg-blue-600 text-white px-12 py-3 rounded-lg uppercase"
+                value="Проверить"
+                class="bg-blue-600 text-white px-12 py-3 rounded-lg uppercase cursor-pointer"
             >
-                Проверить
-            </button>
         </form>
     </div>
 </div>

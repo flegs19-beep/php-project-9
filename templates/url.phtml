@@ -1,0 +1,22 @@
+<div class="max-w-6xl mx-auto px-4 py-8">
+    <h1 class="text-4xl mb-6">
+        Сайт: <?= htmlspecialchars($url['name']) ?>
+    </h1>
+
+    <table data-test="url" class="w-full border-collapse">
+        <tbody>
+            <tr class="border">
+                <td class="font-semibold p-3 border">ID</td>
+                <td class="p-3 border"><?= htmlspecialchars((string) $url['id']) ?></td>
+            </tr>
+            <tr class="border">
+                <td class="font-semibold p-3 border">Имя</td>
+                <td class="p-3 border"><?= htmlspecialchars($url['name']) ?></td>
+            </tr>
+            <tr class="border">
+                <td class="font-semibold p-3 border">Дата создания</td>
+                <td class="p-3 border"><?= htmlspecialchars($url['created_at']) ?></td>
+            </tr>
+        </tbody>
+    </table>
+</div>

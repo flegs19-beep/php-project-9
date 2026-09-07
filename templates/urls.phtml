@@ -1,0 +1,36 @@
+<div class="max-w-6xl mx-auto px-4 py-8">
+    <h1 class="text-4xl mb-6">Сайты</h1>
+
+    <table data-test="urls" class="w-full border-collapse">
+        <thead>
+            <tr class="border">
+                <th class="text-left p-3 border">ID</th>
+                <th class="text-left p-3 border">Имя</th>
+                <th class="text-left p-3 border">Дата создания</th>
+            </tr>
+        </thead>
+
+        <tbody>
+            <?php foreach ($urls as $url): ?>
+                <tr class="border">
+                    <td class="p-3 border">
+                        <?= htmlspecialchars((string) $url['id']) ?>
+                    </td>
+
+                    <td class="p-3 border">
+                        <a
+                            href="/urls/<?= htmlspecialchars((string) $url['id']) ?>"
+                            class="text-blue-600 underline"
+                        >
+                            <?= htmlspecialchars($url['name']) ?>
+                        </a>
+                    </td>
+
+                    <td class="p-3 border">
+                        <?= htmlspecialchars($url['created_at']) ?>
+                    </td>
+                </tr>
+            <?php endforeach; ?>
+        </tbody>
+    </table>
+</div>
