@@ -37,7 +37,7 @@ $shorten = function (?string $text): string {
     }
 
     return mb_strlen($text) > 200
-        ? mb_substr($text, 0, 197) . '...'
+        ? mb_substr($text, 0, 200) . '...'
         : $text;
 };
 ?>
