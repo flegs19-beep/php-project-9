@@ -1,0 +1,16 @@
+{
+    "name": "hexlet/code",
+    "authors": [
+        {
+            "name": "flegs19-beep",
+            "email": "flegs19@gmail.com"
+        }
+    ],
+    "require": {
+        "slim/slim": "^4.15",
+        "slim/psr7": "^1.8"
+    },
+    "require-dev": {
+        "squizlabs/php_codesniffer": "^4.0"
+    }
+}
