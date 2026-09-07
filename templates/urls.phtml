@@ -6,7 +6,6 @@
             <tr class="border">
                 <th class="text-left p-3 border">ID</th>
                 <th class="text-left p-3 border">Имя</th>
-                <th class="text-left p-3 border">Дата создания</th>
                 <th class="text-left p-3 border">Последняя проверка</th>
                 <th class="text-left p-3 border">Код ответа</th>
             </tr>
@@ -26,10 +25,6 @@
                         >
                             <?= htmlspecialchars($url['name']) ?>
                         </a>
-                    </td>
-
-                    <td class="p-3 border">
-                        <?= htmlspecialchars(substr($url['created_at'], 0, 10)) ?>
                     </td>
 
                     <td class="p-3 border">
