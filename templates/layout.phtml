@@ -19,15 +19,15 @@
             <?php foreach ($messages as $message): ?>
                 <div
                     role="alert"
-                    class="px-4 py-3 <?=
+                    class="max-w-6xl mx-auto mt-4 px-4 py-4 rounded <?=
                         $type === 'success'
                             ? 'bg-green-100'
                             : ($type === 'error' ? 'bg-red-100' : 'bg-yellow-100')
                     ?>"
                 >
                     <?= htmlspecialchars($message) ?>
-                </div>
-            <?php endforeach; ?>
+                </div>body>
+                <?php endforeach; ?>
         <?php endforeach; ?>
 
         <?= $content ?>
