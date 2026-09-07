@@ -114,15 +114,15 @@ $app->get('/urls', function ($request, $response) use ($renderer, $pdo, $flash) 
             (SELECT created_at
             FROM url_checks
             WHERE url_checks.url_id = urls.id
-            ORDER BY created_at DESC
+            ORDER BY created_at DESC, id DESC
             LIMIT 1) AS last_check_at,
             (SELECT status_code
             FROM url_checks
             WHERE url_checks.url_id = urls.id
-            ORDER BY created_at DESC
+            ORDER BY created_at DESC, id DESC
             LIMIT 1) AS last_status_code
         FROM urls
-        ORDER BY urls.created_at DESC'
+        ORDER BY urls.created_at DESC, urls.id DESC'
     );
 
     $urls = $statement->fetchAll();
