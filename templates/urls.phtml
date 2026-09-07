@@ -8,6 +8,7 @@
                 <th class="text-left p-3 border">Имя</th>
                 <th class="text-left p-3 border">Дата создания</th>
                 <th class="text-left p-3 border">Последняя проверка</th>
+                <th class="text-left p-3 border">Код ответа</th>
             </tr>
         </thead>
 
@@ -33,6 +34,10 @@
 
                     <td class="p-3 border">
                         <?= htmlspecialchars(isset($url['last_check_at']) ? substr($url['last_check_at'], 0, 10) : '') ?>
+                    </td>
+
+                    <td class="p-3 border">
+                        <?= htmlspecialchars((string) ($url['last_status_code'] ?? '')) ?>
                     </td>
                 </tr>
             <?php endforeach; ?>

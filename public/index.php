@@ -3,6 +3,8 @@
 require __DIR__ . '/../vendor/autoload.php';
 
 use Carbon\Carbon;
+use GuzzleHttp\Client;
+use GuzzleHttp\Exception\GuzzleException;
 use Slim\Factory\AppFactory;
 use Slim\Flash\Messages;
 use Slim\Views\PhpRenderer;
@@ -36,6 +38,11 @@ $renderer->setLayout('layout.phtml');
 
 $flash = new Messages();
 $routeParser = $app->getRouteCollector()->getRouteParser();
+
+$client = new Client([
+    'timeout' => 10,
+    'http_errors' => false,
+]);
 
 $app->get('/', function ($request, $response) use ($renderer, $flash) {
     return $renderer->render($response, 'index.phtml', [
@@ -103,10 +110,18 @@ $app->post('/urls', function ($request, $response) use ($renderer, $pdo, $flash,
 
 $app->get('/urls', function ($request, $response) use ($renderer, $pdo, $flash) {
     $statement = $pdo->query(
-        'SELECT urls.id, urls.name, urls.created_at, MAX(url_checks.created_at) AS last_check_at
+        'SELECT urls.id, urls.name, urls.created_at,
+            (SELECT created_at
+            FROM url_checks
+            WHERE url_checks.url_id = urls.id
+            ORDER BY created_at DESC
+            LIMIT 1) AS last_check_at,
+            (SELECT status_code
+            FROM url_checks
+            WHERE url_checks.url_id = urls.id
+            ORDER BY created_at DESC
+            LIMIT 1) AS last_status_code
         FROM urls
-        LEFT JOIN url_checks ON url_checks.url_id = urls.id
-        GROUP BY urls.id, urls.name, urls.created_at
         ORDER BY urls.created_at DESC'
     );
 
@@ -118,24 +133,68 @@ $app->get('/urls', function ($request, $response) use ($renderer, $pdo, $flash) 
     ]);
 })->setName('urls.index');
 
-$app->post('/urls/{url_id}/checks', function ($request, $response, $args) use ($pdo, $flash, $routeParser) {
-    $statement = $pdo->prepare(
-        'INSERT INTO url_checks (url_id, created_at) VALUES (:url_id, :created_at)'
-    );
 
-    $statement->execute([
-        'url_id' => $args['url_id'],
-        'created_at' => Carbon::now()->format('Y-m-d H:i:s'),
-    ]);
+$app->post(
+    '/urls/{url_id}/checks',
+    function (
+        $request,
+        $response,
+        $args
+    ) use (
+        $pdo,
+        $flash,
+        $routeParser,
+        $client
+    ) {
+        $statement = $pdo->prepare(
+            'SELECT name FROM urls WHERE id = :id'
+        );
+        $statement->execute(['id' => $args['url_id']]);
 
-    $flash->addMessage('success', 'Страница успешно проверена');
+        $url = $statement->fetch();
 
-    return $response
-        ->withHeader('Location', $routeParser->urlFor('urls.show', [
-            'id' => (string) $args['url_id'],
-        ]))
-        ->withStatus(302);
-})->setName('checks.store');
+        if ($url === false) {
+            $response->getBody()->write('Page not found');
+
+            return $response->withStatus(404);
+        }
+
+        try {
+            $siteResponse = $client->get($url['name']);
+        } catch (GuzzleException $e) {
+            $flash->addMessage(
+                'error',
+                'Произошла ошибка при проверке, не удалось подключиться'
+            );
+
+            return $response
+                ->withHeader('Location', $routeParser->urlFor('urls.show', [
+                    'id' => (string) $args['url_id'],
+                ]))
+                ->withStatus(302);
+        }
+
+        $statement = $pdo->prepare(
+            'INSERT INTO url_checks (url_id, status_code, created_at)
+            VALUES (:url_id, :status_code, :created_at)'
+        );
+
+        $statement->execute([
+            'url_id' => $args['url_id'],
+            'status_code' => $siteResponse->getStatusCode(),
+            'created_at' => Carbon::now()->format('Y-m-d H:i:s'),
+        ]);
+
+        $flash->addMessage('success', 'Страница успешно проверена');
+
+        return $response
+            ->withHeader('Location', $routeParser->urlFor('urls.show', [
+                'id' => (string) $args['url_id'],
+            ]))
+            ->withStatus(302);
+    }
+)->setName('checks.store');
+
 
 $app->get('/urls/{id}', function ($request, $response, $args) use ($renderer, $pdo, $flash) {
     $statement = $pdo->prepare('SELECT id, name, created_at FROM urls WHERE id = :id');
@@ -150,8 +209,12 @@ $app->get('/urls/{id}', function ($request, $response, $args) use ($renderer, $p
     }
 
     $statement = $pdo->prepare(
-        'SELECT id, created_at FROM url_checks WHERE url_id = :url_id ORDER BY created_at DESC'
+        'SELECT id, status_code, created_at
+        FROM url_checks
+        WHERE url_id = :url_id
+        ORDER BY created_at DESC'
     );
+
     $statement->execute(['url_id' => $args['id']]);
 
     $checks = $statement->fetchAll();
