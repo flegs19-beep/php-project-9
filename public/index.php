@@ -42,7 +42,6 @@ $routeParser = $app->getRouteCollector()->getRouteParser();
 
 $client = new Client([
     'timeout' => 10,
-    'http_errors' => false,
 ]);
 
 $app->get('/', function ($request, $response) use ($renderer, $flash) {
