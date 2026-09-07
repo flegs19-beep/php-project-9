@@ -15,8 +15,40 @@
             </tr>
             <tr class="border">
                 <td class="font-semibold p-3 border">Дата создания</td>
-                <td class="p-3 border"><?= htmlspecialchars($url['created_at']) ?></td>
+                <td class="p-3 border"><?= htmlspecialchars(substr($url['created_at'], 0, 10)) ?></td>
             </tr>
+        </tbody>
+    </table>
+
+    <h2 class="text-3xl mt-14 mb-4">Проверки</h2>
+
+    <form method="post" action="/urls/<?= htmlspecialchars((string) $url['id']) ?>/checks">
+        <input
+            type="submit"
+            value="Запустить проверку"
+            class="bg-blue-600 text-white px-4 py-2 rounded cursor-pointer"
+        >
+    </form>
+
+    <table data-test="checks" class="w-full border-collapse mt-2">
+        <thead>
+            <tr class="border">
+                <th class="text-left p-3 border">ID</th>
+                <th class="text-left p-3 border">Дата создания</th>
+            </tr>
+        </thead>
+
+        <tbody>
+            <?php foreach ($checks as $check): ?>
+                <tr class="border">
+                    <td class="p-3 border">
+                        <?= htmlspecialchars((string) $check['id']) ?>
+                    </td>
+                    <td class="p-3 border">
+                        <?= htmlspecialchars(substr($check['created_at'], 0, 10)) ?>
+                    </td>
+                </tr>
+            <?php endforeach; ?>
         </tbody>
     </table>
 </div>

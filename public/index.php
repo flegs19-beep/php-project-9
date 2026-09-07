@@ -103,7 +103,11 @@ $app->post('/urls', function ($request, $response) use ($renderer, $pdo, $flash,
 
 $app->get('/urls', function ($request, $response) use ($renderer, $pdo, $flash) {
     $statement = $pdo->query(
-        'SELECT id, name, created_at FROM urls ORDER BY created_at DESC'
+        'SELECT urls.id, urls.name, urls.created_at, MAX(url_checks.created_at) AS last_check_at
+        FROM urls
+        LEFT JOIN url_checks ON url_checks.url_id = urls.id
+        GROUP BY urls.id, urls.name, urls.created_at
+        ORDER BY urls.created_at DESC'
     );
 
     $urls = $statement->fetchAll();
@@ -113,6 +117,25 @@ $app->get('/urls', function ($request, $response) use ($renderer, $pdo, $flash) 
         'flash' => $flash->getMessages(),
     ]);
 })->setName('urls.index');
+
+$app->post('/urls/{url_id}/checks', function ($request, $response, $args) use ($pdo, $flash, $routeParser) {
+    $statement = $pdo->prepare(
+        'INSERT INTO url_checks (url_id, created_at) VALUES (:url_id, :created_at)'
+    );
+
+    $statement->execute([
+        'url_id' => $args['url_id'],
+        'created_at' => Carbon::now()->format('Y-m-d H:i:s'),
+    ]);
+
+    $flash->addMessage('success', 'Страница успешно проверена');
+
+    return $response
+        ->withHeader('Location', $routeParser->urlFor('urls.show', [
+            'id' => (string) $args['url_id'],
+        ]))
+        ->withStatus(302);
+})->setName('checks.store');
 
 $app->get('/urls/{id}', function ($request, $response, $args) use ($renderer, $pdo, $flash) {
     $statement = $pdo->prepare('SELECT id, name, created_at FROM urls WHERE id = :id');
@@ -126,8 +149,16 @@ $app->get('/urls/{id}', function ($request, $response, $args) use ($renderer, $p
         return $response->withStatus(404);
     }
 
+    $statement = $pdo->prepare(
+        'SELECT id, created_at FROM url_checks WHERE url_id = :url_id ORDER BY created_at DESC'
+    );
+    $statement->execute(['url_id' => $args['id']]);
+
+    $checks = $statement->fetchAll();
+
     return $renderer->render($response, 'url.phtml', [
         'url' => $url,
+        'checks' => $checks,
         'flash' => $flash->getMessages(),
     ]);
 })->setName('urls.show');
