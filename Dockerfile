@@ -1,3 +1,16 @@
+FROM node:24-bookworm-slim AS assets
+
+WORKDIR /app
+
+COPY package.json package-lock.json ./
+RUN npm ci
+
+COPY resources ./resources
+COPY templates ./templates
+
+RUN mkdir -p public && npm run build
+
+
 FROM php:8.4-cli
 
 RUN apt-get update && apt-get install -y libzip-dev libpq-dev
@@ -12,5 +25,7 @@ WORKDIR /app
 COPY . .
 
 RUN composer install
+
+COPY --from=assets /app/public/app.css ./public/app.css
 
 CMD ["bash", "-c", "make start"]

@@ -5,6 +5,8 @@ start:
 
 setup:
 	composer install
+	npm ci
+	npm run build
 
 lint:
 	php vendor/bin/phpcs --standard=PSR12 public
