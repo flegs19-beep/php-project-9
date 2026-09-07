@@ -13,7 +13,9 @@
         "slim/flash": "^0.4.0",
         "vlucas/valitron": "^1.4",
         "nesbot/carbon": "^3.13",
-        "guzzlehttp/guzzle": "^8.2"
+        "guzzlehttp/guzzle": "^8.2",
+        "symfony/dom-crawler": "^7.4",
+        "symfony/css-selector": "^7.4"
     },
     "require-dev": {
         "squizlabs/php_codesniffer": "^4.0"

@@ -30,29 +30,53 @@
         >
     </form>
 
-    <table data-test="checks" class="w-full border-collapse mt-2">
-        <thead>
-            <tr class="border">
-                <th class="text-left p-3 border">ID</th>
-                <th class="text-left p-3 border">Код ответа</th>
-                <th class="text-left p-3 border">Дата создания</th>
-            </tr>
-        </thead>
+<?php
+$shorten = function (?string $text): string {
+    if ($text === null) {
+        return '';
+    }
 
-        <tbody>
-            <?php foreach ($checks as $check): ?>
-                    <tr class="border">
-                        <td class="p-3 border">
-                            <?= htmlspecialchars((string) $check['id']) ?>
-                        </td>
-                        <td class="p-3 border">
-                            <?= htmlspecialchars((string) ($check['status_code'] ?? '')) ?>
-                        </td>
-                        <td class="p-3 border">
-                            <?= htmlspecialchars(substr($check['created_at'], 0, 10)) ?>
-                        </td>
-                    </tr>
-                <?php endforeach; ?>
-        </tbody>
-    </table>
+    return mb_strlen($text) > 200
+        ? mb_substr($text, 0, 197) . '...'
+        : $text;
+};
+?>
+
+<table data-test="checks" class="w-full border-collapse mt-2">
+    <thead>
+        <tr class="border">
+            <th class="text-left p-3 border">ID</th>
+            <th class="text-left p-3 border">Код ответа</th>
+            <th class="text-left p-3 border">h1</th>
+            <th class="text-left p-3 border">title</th>
+            <th class="text-left p-3 border">description</th>
+            <th class="text-left p-3 border">Дата создания</th>
+        </tr>
+    </thead>
+
+    <tbody>
+        <?php foreach ($checks as $check): ?>
+            <tr class="border">
+                <td class="p-3 border">
+                    <?= htmlspecialchars((string) $check['id']) ?>
+                </td>
+                <td class="p-3 border">
+                    <?= htmlspecialchars((string) ($check['status_code'] ?? '')) ?>
+                </td>
+                <td class="p-3 border">
+                    <?= htmlspecialchars($shorten($check['h1'])) ?>
+                </td>
+                <td class="p-3 border">
+                    <?= htmlspecialchars($shorten($check['title'])) ?>
+                </td>
+                <td class="p-3 border">
+                    <?= htmlspecialchars($shorten($check['description'])) ?>
+                </td>
+                <td class="p-3 border">
+                    <?= htmlspecialchars(substr($check['created_at'], 0, 10)) ?>
+                </td>
+            </tr>
+        <?php endforeach; ?>
+    </tbody>
+</table>
 </div>

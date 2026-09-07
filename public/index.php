@@ -5,6 +5,7 @@ require __DIR__ . '/../vendor/autoload.php';
 use Carbon\Carbon;
 use GuzzleHttp\Client;
 use GuzzleHttp\Exception\GuzzleException;
+use Symfony\Component\DomCrawler\Crawler;
 use Slim\Factory\AppFactory;
 use Slim\Flash\Messages;
 use Slim\Views\PhpRenderer;
@@ -174,14 +175,31 @@ $app->post(
                 ->withStatus(302);
         }
 
+        $crawler = new Crawler((string) $siteResponse->getBody());
+
+        $h1Node = $crawler->filter('h1')->first();
+        $titleNode = $crawler->filter('title')->first();
+        $descriptionNode = $crawler->filter('meta[name="description"]')->first();
+
+        $h1 = $h1Node->count() > 0 ? $h1Node->text() : null;
+        $title = $titleNode->count() > 0 ? $titleNode->text() : null;
+        $description = $descriptionNode->count() > 0
+            ? $descriptionNode->attr('content')
+            : null;
+
         $statement = $pdo->prepare(
-            'INSERT INTO url_checks (url_id, status_code, created_at)
-            VALUES (:url_id, :status_code, :created_at)'
+            'INSERT INTO url_checks
+            (url_id, status_code, h1, title, description, created_at)
+            VALUES
+            (:url_id, :status_code, :h1, :title, :description, :created_at)'
         );
 
         $statement->execute([
             'url_id' => $args['url_id'],
             'status_code' => $siteResponse->getStatusCode(),
+            'h1' => $h1,
+            'title' => $title,
+            'description' => $description,
             'created_at' => Carbon::now()->format('Y-m-d H:i:s'),
         ]);
 
@@ -209,7 +227,7 @@ $app->get('/urls/{id}', function ($request, $response, $args) use ($renderer, $p
     }
 
     $statement = $pdo->prepare(
-        'SELECT id, status_code, created_at
+        'SELECT id, status_code, h1, title, description, created_at
         FROM url_checks
         WHERE url_id = :url_id
         ORDER BY created_at DESC'
