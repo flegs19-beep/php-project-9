@@ -19,10 +19,7 @@
                     </td>
 
                     <td class="p-3 border">
-                        <a
-                            href="/urls/<?= htmlspecialchars((string) $url['id']) ?>"
-                            class="text-blue-600 underline"
-                        >
+                        <a href="<?= $router->urlFor('urls.show', ['id' => (string) $url['id']]) ?>" class="text-blue-600 underline">
                             <?= htmlspecialchars($url['name']) ?>
                         </a>
                     </td>

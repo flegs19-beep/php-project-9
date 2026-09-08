@@ -9,24 +9,15 @@
 <body class="min-h-screen flex flex-col">
     <nav class="bg-gray-800 text-white">
         <div class="px-4 py-4 flex gap-6 items-center">
-            <a href="/" class="text-xl font-semibold">Анализатор страниц</a>
-            <a href="/urls" class="text-gray-400">Сайты</a>
+            <a href="<?= $router->urlFor('home') ?>" class="text-xl font-semibold">Анализатор страниц</a>
+            <a href="<?= $router->urlFor('urls.index') ?>" class="text-gray-400">Сайты</a>
         </div>
     </nav>
 
     <main class="flex-1">
-        <?php foreach (($flash ?? []) as $type => $messages): ?>
+        <?php foreach ($flash->getMessages() as $type => $messages): ?>
             <?php foreach ($messages as $message): ?>
-                <div
-                    role="alert"
-                    class="max-w-6xl mx-auto mt-4 px-4 py-4 rounded <?=
-                        $type === 'success'
-                            ? 'bg-green-100'
-                            : ($type === 'error' ? 'bg-red-100' : 'bg-yellow-100')
-                    ?>"
-                >
-                    <?= htmlspecialchars($message) ?>
-                </div>
+                <div role="alert" class="max-w-6xl mx-auto mt-4 px-4 py-4 rounded <?=$type === 'success' ? 'bg-green-100' : ($type === 'error' ? 'bg-red-100' : 'bg-yellow-100')?>"><?= htmlspecialchars($message) ?></div>
                 <?php endforeach; ?>
         <?php endforeach; ?>
 

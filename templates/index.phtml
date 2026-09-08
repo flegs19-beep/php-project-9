@@ -1,33 +1,18 @@
 <div class="max-w-4xl mx-auto mt-4">
     <div class="bg-gray-50 border border-gray-200 rounded-lg p-12">
         <h1 class="text-6xl font-normal mb-4">Анализатор страниц</h1>
+        <p class="text-xl mb-4">Бесплатно проверяйте сайты на SEO-пригодность</p>
 
-        <p class="text-xl mb-4">
-            Бесплатно проверяйте сайты на SEO-пригодность
-        </p>
-
-        <form action="/urls" method="post" class="flex gap-4">
+        <form action="<?= $router->urlFor('urls.store') ?>" method="post" class="flex gap-4">
             <div class="flex-1">
-                <input
-                    type="text"
-                    name="url"
-                    value="<?= htmlspecialchars($url ?? '') ?>"
-                    placeholder="https://www.example.com"
-                    class="w-full rounded-lg"
-                >
+                <input type="text" name="url" value="<?= htmlspecialchars($url ?? '') ?>" placeholder="https://www.example.com" class="w-full rounded-lg">
 
                 <?php if (!empty($errors['url'])): ?>
-                    <div class="text-red-600 mt-2">
-                        <?= htmlspecialchars($errors['url'][0]) ?>
-                    </div>
+                    <div class="text-red-600 mt-2"><?= htmlspecialchars($errors['url'][0]) ?></div>
                 <?php endif; ?>
             </div>
 
-            <input
-                type="submit"
-                value="Проверить"
-                class="bg-blue-600 text-white px-12 py-3 rounded-lg uppercase cursor-pointer"
-            >
+            <input type="submit" value="Проверить" class="bg-blue-600 text-white px-12 py-3 rounded-lg uppercase cursor-pointer">
         </form>
     </div>
 </div>
