@@ -1,7 +1,6 @@
 [![Actions Status](https://github.com/flegs19-beep/php-project-9/actions/workflows/hexlet-check.yml/badge.svg)](https://github.com/flegs19-beep/php-project-9/actions)
 [![lint](https://github.com/flegs19-beep/php-project-9/actions/workflows/lint.yml/badge.svg)](https://github.com/flegs19-beep/php-project-9/actions/workflows/lint.yml)
 [![Quality Gate Status](https://sonarcloud.io/api/project_badges/measure?project=flegs19-beep_php-project-9\&metric=alert_status)](https://sonarcloud.io/summary/new_code?id=flegs19-beep_php-project-9)
-[![Coverage](https://sonarcloud.io/api/project_badges/measure?project=flegs19-beep_php-project-9\&metric=coverage)](https://sonarcloud.io/summary/new_code?id=flegs19-beep_php-project-9)
 [![Duplicated Lines (%)](https://sonarcloud.io/api/project_badges/measure?project=flegs19-beep_php-project-9\&metric=duplicated_lines_density)](https://sonarcloud.io/summary/new_code?id=flegs19-beep_php-project-9)
 [![Lines of Code](https://sonarcloud.io/api/project_badges/measure?project=flegs19-beep_php-project-9\&metric=ncloc)](https://sonarcloud.io/summary/new_code?id=flegs19-beep_php-project-9)
 [![Reliability Rating](https://sonarcloud.io/api/project_badges/measure?project=flegs19-beep_php-project-9\&metric=reliability_rating)](https://sonarcloud.io/summary/new_code?id=flegs19-beep_php-project-9)
