@@ -200,8 +200,8 @@ $app->post('/urls/{url_id:[0-9]+}/checks', function ($request, $response, $args)
     $description = $descriptionNode->count() > 0 ? $descriptionNode->attr('content') : null;
 
     $statement = $pdo->prepare(
-        'INSERT INTO url_checks (url_id, status_code, h1, title, description, created_at) ' .
-        'VALUES (:url_id, :status_code, :h1, :title, :description, :created_at)'
+        'INSERT INTO url_checks (url_id, status_code, h1, title, description, created_at)
+        VALUES (:url_id, :status_code, :h1, :title, :description, :created_at)'
     );
     $statement->execute([
         'url_id' => $args['url_id'],
@@ -231,8 +231,10 @@ $app->get('/urls/{id:[0-9]+}', function ($request, $response, $args) use ($conta
     }
 
     $statement = $pdo->prepare(
-        'SELECT id, status_code, h1, title, description, created_at FROM url_checks ' .
-        'WHERE url_id = :url_id ORDER BY created_at DESC'
+        'SELECT id, status_code, h1, title, description, created_at
+        FROM url_checks
+        WHERE url_id = :url_id
+        ORDER BY created_at DESC'
     );
     $statement->execute(['url_id' => $args['id']]);
     $checks = $statement->fetchAll();
