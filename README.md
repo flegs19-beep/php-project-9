@@ -7,8 +7,6 @@
 [![Reliability Rating](https://sonarcloud.io/api/project_badges/measure?project=flegs19-beep_php-project-9\&metric=reliability_rating)](https://sonarcloud.io/summary/new_code?id=flegs19-beep_php-project-9)
 [![Security Rating](https://sonarcloud.io/api/project_badges/measure?project=flegs19-beep_php-project-9\&metric=security_rating)](https://sonarcloud.io/summary/new_code?id=flegs19-beep_php-project-9)
 [![Maintainability Issues](https://sonarcloud.io/api/project_badges/measure?project=flegs19-beep_php-project-9\&metric=software_quality_maintainability_issues)](https://sonarcloud.io/summary/new_code?id=flegs19-beep_php-project-9)
-[![Reliability Issues](https://sonarcloud.io/api/project_badges/measure?project=flegs19-beep_php-project-9\&metric=software_quality_reliability_issues)](https://sonarcloud.io/summary/new_code?id=flegs19-beep_php-project-9)
-[![Security Issues](https://sonarcloud.io/api/project_badges/measure?project=flegs19-beep_php-project-9\&metric=software_quality_security_issues)](https://sonarcloud.io/summary/new_code?id=flegs19-beep_php-project-9)
 [![Technical Debt](https://sonarcloud.io/api/project_badges/measure?project=flegs19-beep_php-project-9\&metric=sqale_index)](https://sonarcloud.io/summary/new_code?id=flegs19-beep_php-project-9)
 [![Maintainability Rating](https://sonarcloud.io/api/project_badges/measure?project=flegs19-beep_php-project-9\&metric=sqale_rating)](https://sonarcloud.io/summary/new_code?id=flegs19-beep_php-project-9)
 
