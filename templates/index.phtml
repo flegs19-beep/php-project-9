@@ -4,11 +4,12 @@
         <p class="text-xl mb-4">Бесплатно проверяйте сайты на SEO-пригодность</p>
 
         <form action="<?= $router->urlFor('urls.store') ?>" method="post" class="flex gap-4">
-            <div class="flex-1">
-                <input type="text" name="url" value="<?= htmlspecialchars($url ?? '') ?>" placeholder="https://www.example.com" class="w-full rounded-lg">
+        <div class="flex-1">
+            <label for="url" class="sr-only">Адрес сайта</label>
+            <input id="url" type="text" name="url" value="<?= htmlspecialchars($url ?? '') ?>" placeholder="https://www.example.com" class="w-full rounded-lg">
 
-                <?php if (!empty($errors['url'])): ?>
-                    <div class="text-red-600 mt-2"><?= htmlspecialchars($errors['url'][0]) ?></div>
+        <?php if (!empty($errors['url'])): ?>
+        <div class="text-red-600 mt-2"><?= htmlspecialchars($errors['url'][0]) ?></div>
                 <?php endif; ?>
             </div>
 

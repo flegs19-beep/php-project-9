@@ -5,16 +5,16 @@
 
     <table data-test="url" class="w-full border-collapse">
         <tbody>
-            <tr class="border">
-                <td class="font-semibold p-3 border">ID</td>
+           <tr class="border">
+                <th scope="row" class="font-semibold p-3 border">ID</th>
                 <td class="p-3 border"><?= htmlspecialchars((string) $url['id']) ?></td>
             </tr>
             <tr class="border bg-gray-100">
-                <td class="font-semibold p-3 border">Имя</td>
+                <th scope="row" class="font-semibold p-3 border">Имя</th>
                 <td class="p-3 border"><?= htmlspecialchars($url['name']) ?></td>
             </tr>
             <tr class="border">
-                <td class="font-semibold p-3 border">Дата создания</td>
+                <th scope="row" class="font-semibold p-3 border">Дата создания</th>
                 <td class="p-3 border"><?= htmlspecialchars(substr($url['created_at'], 0, 10)) ?></td>
             </tr>
         </tbody>

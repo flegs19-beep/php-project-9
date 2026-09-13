@@ -16,9 +16,21 @@
 
     <main class="flex-1">
         <?php foreach ($flash->getMessages() as $type => $messages): ?>
+            <?php
+            $alertClass = 'bg-yellow-100';
+
+            if ($type === 'success') {
+                $alertClass = 'bg-green-100';
+            } elseif ($type === 'error') {
+                $alertClass = 'bg-red-100';
+            }
+            ?>
+
             <?php foreach ($messages as $message): ?>
-                <div role="alert" class="max-w-6xl mx-auto mt-4 px-4 py-4 rounded <?=$type === 'success' ? 'bg-green-100' : ($type === 'error' ? 'bg-red-100' : 'bg-yellow-100')?>"><?= htmlspecialchars($message) ?></div>
-                <?php endforeach; ?>
+                <div role="alert" class="max-w-6xl mx-auto mt-4 px-4 py-4 rounded <?= $alertClass ?>">
+                    <?= htmlspecialchars($message) ?>
+                </div>
+            <?php endforeach; ?>
         <?php endforeach; ?>
 
         <?= $content ?>
