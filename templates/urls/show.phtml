@@ -26,18 +26,6 @@
         <input type="submit" value="Запустить проверку" class="bg-blue-600 text-white px-4 py-2 rounded cursor-pointer">
     </form>
 
-<?php
-$shorten = function (?string $text): string {
-    if ($text === null) {
-        return '';
-    }
-
-    return mb_strlen($text) > 200
-        ? mb_substr($text, 0, 200) . '...'
-        : $text;
-};
-?>
-
 <table data-test="checks" class="w-full border-collapse mt-2">
     <thead>
         <tr class="border">

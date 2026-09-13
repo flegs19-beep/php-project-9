@@ -14,6 +14,16 @@ use Slim\Exception\HttpNotFoundException;
 use DI\Container;
 use function DI\factory;
 
+$shorten = function (?string $text): string {
+    if ($text === null) {
+        return '';
+    }
+
+    return mb_strlen($text) > 200
+        ? mb_substr($text, 0, 200) . '...'
+        : $text;
+};
+
 session_start();
 
 $databaseUrl = parse_url(getenv('DATABASE_URL'));
@@ -36,6 +46,7 @@ $container->set(PDO::class, factory(function () use ($dsn, $databaseUrl) {
 
 $renderer = new PhpRenderer(__DIR__ . '/../templates');
 $renderer->setLayout('layout.phtml');
+$renderer->addAttribute('shorten', $shorten);
 
 $container->set(PhpRenderer::class, $renderer);
 $container->set(Messages::class, new Messages());
@@ -93,11 +104,11 @@ $app->post('/urls', function ($request, $response) use ($container, $routeParser
     $validator->rule('lengthMax', 'url', 255)->message('URL превышает 255 символов');
 
     if (!$validator->validate()) {
-            return $renderer->render(
-                $response->withStatus(422),
-                'index.phtml',
-                ['errors' => $validator->errors(), 'url' => $url]
-            );
+        return $renderer->render(
+            $response->withStatus(422),
+            'index.phtml',
+            ['errors' => $validator->errors(), 'url' => $url]
+        );
     }
 
     $parsedUrl = parse_url($url);
@@ -133,9 +144,14 @@ $app->get('/urls', function ($request, $response) use ($container) {
     $pdo = $container->get(PDO::class);
 
     $urls = $pdo->query('SELECT id, name, created_at FROM urls ORDER BY created_at DESC, id DESC')->fetchAll();
+
     $checks = $pdo->query(
-        'SELECT DISTINCT ON (url_id) url_id, created_at AS last_check_at, status_code AS last_status_code ' .
-        'FROM url_checks ORDER BY url_id, created_at DESC, id DESC'
+        'SELECT DISTINCT ON (url_id)
+            url_id,
+            created_at AS last_check_at,
+            status_code AS last_status_code
+        FROM url_checks
+        ORDER BY url_id, created_at DESC, id DESC'
     )->fetchAll();
 
     $checksByUrlId = [];
